@@ -155,6 +155,24 @@ i.fa {
   background-color: #fff;
 }
 
+/** Make table contents wrap on mobile devices (override bootstrap) **/
+.table-responsive{
+  @media screen and (max-width: $screen-xs-max) {
+    > .table{
+      > thead,
+      > tbody,
+      > tfoot {
+        > tr {
+          > th,
+          > td {
+            white-space: normal;
+          }
+        }
+      }
+    }
+  }
+}
+
 /** General classes. **/
 .text-large {
   font-size: 1.2em;
@@ -1121,6 +1139,10 @@ a.inline-link {
 }
 
 /** attendance list for gigs **/
+i.comment-toggle{
+  cursor: pointer;
+}
+
 #attendance-list {
   tr.voice{
     background-color: $grey;

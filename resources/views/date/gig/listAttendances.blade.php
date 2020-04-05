@@ -49,21 +49,32 @@
                                                     <td>{{ $user->abbreviated_name }}</td>
                                                     @foreach($gigs as $gig)
                                                         <?php $comment = $gig->hasCommented($user) ? $gig->getComment($user) : ''; ?>
-                                                        <?php $mark = $gig->hasCommented($user) ? '&nbsp;<i class="far fa-comment"></i>' : ''; ?>
+                                                        <?php 
+                                                            if($gig->hasCommented($user)){
+                                                                $gigid = $gig->id;
+                                                                $userid = $user->id;
+                                                                $mark = '&nbsp;<i class="far fa-comment comment-toggle" id="comment-toggle-'.$userid.'-'.$gigid.'" title="'.$comment.'"></i>';
+                                                                $mark .= '<div id="comment-'.$userid.'-'.$gigid.'"" style="display: none">'.$comment.'</div>';
+                                                                $mark .= '<script type="text/javascript">$(document).ready(function(){$("#comment-toggle-'.$userid.'-'.$gigid.'").click(function(){$("#comment-'.$userid.'-'.$gigid.'").toggle();});});</script>';
+                                                            }
+                                                            else{
+                                                                $mark = '';
+                                                            }
+                                                        ?>
                                                         @if($gig->isAttending($user) == 'yes')
-                                                            <td class="attending" title="{{ $comment }}">
+                                                            <td class="attending">
                                                                 <i class="fa fa-check"></i>{!! $mark !!}
                                                             </td>
                                                         @elseif($gig->isAttending($user) == 'maybe')
-                                                            <td class="maybe-attending" title="{{ $comment }}">
+                                                            <td class="maybe-attending">
                                                                 <i class="fa fa-question"></i>{!! $mark !!}
                                                             </td>
                                                         @elseif($gig->isAttending($user) == 'no')
-                                                            <td class="not-attending" title="{{ $comment }}">
+                                                            <td class="not-attending">
                                                                 <i class="fa fa-times"></i>{!! $mark !!}
                                                             </td>
                                                         @else
-                                                            <td class="unanswered" title="{{ $comment }}">
+                                                            <td class="unanswered">
                                                                 <i class="fa fa-minus"></i>{!! $mark !!}
                                                             </td>
                                                         @endif
