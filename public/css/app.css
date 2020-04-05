@@ -7777,18 +7777,6 @@ i.fa {
   background-color: #fff;
 }
 
-/** Make table contents wrap on mobile devices (override bootstrap) **/
-@media screen and (max-width: 767px) {
-  .table-responsive > .table > thead > tr > th,
-  .table-responsive > .table > thead > tr > td,
-  .table-responsive > .table > tbody > tr > th,
-  .table-responsive > .table > tbody > tr > td,
-  .table-responsive > .table > tfoot > tr > th,
-  .table-responsive > .table > tfoot > tr > td {
-    white-space: normal;
-  }
-}
-
 /** General classes. **/
 .text-large, .panel-2d .panel-body .panel-heading, .panel-2d .panel-body .panel-element .panel-element-body .panel-element-main {
   font-size: 1.2em;
@@ -8899,9 +8887,21 @@ a.inline-link {
   padding: 0;
 }
 
-/** attendance list for gigs **/
-i.comment-toggle {
+/*** attendance list for gigs ***/
+.comment-toggle, .full-comment {
   cursor: pointer;
+}
+
+/* Make table contents wrap on mobile devices (override bootstrap) */
+@media screen and (max-width: 767px) {
+  #attendance-list > .table > thead > tr > th,
+  #attendance-list > .table > thead > tr > td,
+  #attendance-list > .table > tbody > tr > th,
+  #attendance-list > .table > tbody > tr > td,
+  #attendance-list > .table > tfoot > tr > th,
+  #attendance-list > .table > tfoot > tr > td {
+    white-space: normal;
+  }
 }
 
 #attendance-list tr.voice {

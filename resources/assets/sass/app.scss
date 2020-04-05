@@ -155,24 +155,6 @@ i.fa {
   background-color: #fff;
 }
 
-/** Make table contents wrap on mobile devices (override bootstrap) **/
-#attendance-list{
-  @media screen and (max-width: $screen-xs-max) {
-    > .table{
-      > thead,
-      > tbody,
-      > tfoot {
-        > tr {
-          > th,
-          > td {
-            white-space: normal;
-          }
-        }
-      }
-    }
-  }
-}
-
 /** General classes. **/
 .text-large {
   font-size: 1.2em;
@@ -1138,9 +1120,27 @@ a.inline-link {
   padding: 0;
 }
 
-/** attendance list for gigs **/
-i.comment-toggle{
+/*** attendance list for gigs ***/
+.comment-toggle, .full-comment{
   cursor: pointer;
+}
+
+/* Make table contents wrap on mobile devices (override bootstrap) */
+#attendance-list{
+  @media screen and (max-width: $screen-xs-max) {
+    > .table{
+      > thead,
+      > tbody,
+      > tfoot {
+        > tr {
+          > th,
+          > td {
+            white-space: normal;
+          }
+        }
+      }
+    }
+  }
 }
 
 #attendance-list {
