@@ -51,11 +51,8 @@
                                                         <?php $comment = $gig->hasCommented($user) ? $gig->getComment($user) : ''; ?>
                                                         <?php 
                                                             if($gig->hasCommented($user)){
-                                                                $gigid = $gig->id;
-                                                                $userid = $user->id;
-                                                                $mark = '&nbsp;<i class="far fa-comment comment-toggle" id="comment-toggle-'.$userid.'-'.$gigid.'" title="'.$comment.'"></i>';
-                                                                $mark .= '<div id="comment-'.$userid.'-'.$gigid.'"" style="display: none">'.$comment.'</div>';
-                                                                $mark .= '<script type="text/javascript">$(document).ready(function(){$("#comment-toggle-'.$userid.'-'.$gigid.'").click(function(){$("#comment-'.$userid.'-'.$gigid.'").toggle();});});</script>';
+                                                                $mark = '&nbsp;<i class="far fa-comment comment-toggle" title="'.$comment.'"></i>';
+                                                                $mark .= '<div class="full-comment" style="display: none">'.$comment.'</div>';
                                                             }
                                                             else{
                                                                 $mark = '';
@@ -112,6 +109,9 @@
                     $(this).data("status", "hidden").find("i").removeClass("fa-caret-down").addClass("fa-caret-right");
                     $(".super-voice-" + voice).data("status", "hidden").find("i").removeClass("fa-caret-down").addClass("fa-caret-right");
                 }
+            });
+            $(".comment-toggle").click(function(){
+                $(this).next(".full-comment").toggle();
             });
         });
     </script>
