@@ -1185,6 +1185,22 @@ a.inline-link {
       background-color: $error-color;
     }
   }
+
+  /*
+  tr.subvoice td{
+    .overviewnumber{
+      opacity: 0.8;
+      padding: 0.1em;
+    }
+
+    .positive{
+      background-color: $success-color;
+    }
+
+    .maybe{
+      background-color: $warning-color;
+    }
+  }*/
 }
 
 #calendar_sync_end, #calendar_sync_conclusion, #calendar_sync_intermezzo {

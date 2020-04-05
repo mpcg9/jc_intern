@@ -8904,6 +8904,24 @@ a.inline-link {
   }
 }
 
+#attendance-list {
+  /*
+  tr.subvoice td{
+    .overviewnumber{
+      opacity: 0.8;
+      padding: 0.1em;
+    }
+
+    .positive{
+      background-color: $success-color;
+    }
+
+    .maybe{
+      background-color: $warning-color;
+    }
+  }*/
+}
+
 #attendance-list tr.voice {
   background-color: #c3c3c3;
 }
