@@ -156,7 +156,7 @@ i.fa {
 }
 
 /** Make table contents wrap on mobile devices (override bootstrap) **/
-.table-responsive{
+#attendance-list{
   @media screen and (max-width: $screen-xs-max) {
     > .table{
       > thead,
