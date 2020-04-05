@@ -18,3 +18,4 @@ package-lock.json
 .buildpath
 .project
 /.vscode
+/.settings
