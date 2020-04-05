@@ -29,11 +29,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php //TODO: This should probably go into GigAttendanceController somehow...
+
+                                        foreach($gigs as $gig){
+                                            $gigattendances[$gig->id] = $gig->gig_attendances()->get();
+                                        }
+                                    ?>
                                     @foreach($voices as $voice)
                                         @foreach($voice->children as $sub_voice)
                                             <tr class="subvoice">
                                                 <td>
                                                     {{$sub_voice->name}}
+                                                    <?php 
+                                                        //TODO: This should probably go into GigAttendanceController somehow...
+                                                        $users = $sub_voice->users()->currentAndFuture()->get();
+                                                        $userIDs = $users->keyBy('id')->keys()->all();
+                                                    ?>
                                                     <span class="pull-right">
                                                         <div class="btn btn-2d btn-toggle super-voice-{{ $voice->name }}" data-voice="{{ str_replace(' ', '-', $sub_voice->name) }}" data-status="hidden">
                                                             <i class="fa fa-caret-right"></i>
@@ -41,10 +52,27 @@
                                                     </span>
                                                 </td>
                                                 @foreach($gigs as $gig)
-                                                    <td>{{ $gig->getAttendanceCount($sub_voice->users()->currentAndFuture()->get()) }}</td>
+                                                    <td>
+                                                    <?php 
+                                                        //TODO: This should probably go into GigAttendanceController somehow...
+                                                        $voiceAttendances = $gigattendances[$gig->id];
+                                                        $voiceAttendances = \App\Models\Event::filterAttendancesByUserIDs($voiceAttendances, $userIDs);
+                                                        $voiceAttendances = \App\Models\Event::getAttendanceCountNew($voiceAttendances);
+                                                        
+                                                    ?>
+                                                        <span class ="positive overviewnumber">
+                                                            {{ $voiceAttendances[\Config::get('enums.attendances')['yes']] }}
+                                                            <i class="fa fa-check"></i>
+                                                        </span>&nbsp;
+                                                        <span class ="maybe overviewnumber">
+                                                            {{ $voiceAttendances[\Config::get('enums.attendances')['maybe']] }}
+                                                            <i class="fa fa-question"></i>&nbsp;
+                                                        </span>
+                                                    </td>
                                                 @endforeach
+                                                
                                             </tr>
-                                            @foreach($sub_voice->users()->currentAndFuture()->get() as $user)
+                                            @foreach($users as $user)
                                                 <tr class="user voice-{{ $voice->name }} voice-{{ str_replace(' ', '-', $sub_voice->name) }}">
                                                     <td>{{ $user->abbreviated_name }}</td>
                                                     @foreach($gigs as $gig)
