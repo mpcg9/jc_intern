@@ -1120,7 +1120,29 @@ a.inline-link {
   padding: 0;
 }
 
-/** attendance list for gigs **/
+/*** attendance list for gigs ***/
+.comment-toggle, .full-comment{
+  cursor: pointer;
+}
+
+/* Make table contents wrap on mobile devices (override bootstrap) */
+#attendance-list{
+  @media screen and (max-width: $screen-xs-max) {
+    > .table{
+      > thead,
+      > tbody,
+      > tfoot {
+        > tr {
+          > th,
+          > td {
+            white-space: normal;
+          }
+        }
+      }
+    }
+  }
+}
+
 #attendance-list {
   tr.voice{
     background-color: $grey;

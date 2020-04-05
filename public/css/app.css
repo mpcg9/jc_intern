@@ -8887,7 +8887,23 @@ a.inline-link {
   padding: 0;
 }
 
-/** attendance list for gigs **/
+/*** attendance list for gigs ***/
+.comment-toggle, .full-comment {
+  cursor: pointer;
+}
+
+/* Make table contents wrap on mobile devices (override bootstrap) */
+@media screen and (max-width: 767px) {
+  #attendance-list > .table > thead > tr > th,
+  #attendance-list > .table > thead > tr > td,
+  #attendance-list > .table > tbody > tr > th,
+  #attendance-list > .table > tbody > tr > td,
+  #attendance-list > .table > tfoot > tr > th,
+  #attendance-list > .table > tfoot > tr > td {
+    white-space: normal;
+  }
+}
+
 #attendance-list {
   /*
   tr.subvoice td{

@@ -76,25 +76,33 @@
                                                 <tr class="user voice-{{ $voice->name }} voice-{{ str_replace(' ', '-', $sub_voice->name) }}">
                                                     <td>{{ $user->abbreviated_name }}</td>
                                                     @foreach($gigs as $gig)
-                                                        <?php $comment = $gig->hasCommented($user) ? $gig->getComment($user) : ''; ?>
-                                                        <?php $mark = $gig->hasCommented($user) ? '&nbsp;<i class="far fa-comment"></i>' : ''; ?>
-                                                        @if($gig->isAttending($user) == 'yes')
-                                                            <td class="attending" title="{{ $comment }}">
-                                                                <i class="fa fa-check"></i>{!! $mark !!}
-                                                            </td>
-                                                        @elseif($gig->isAttending($user) == 'maybe')
-                                                            <td class="maybe-attending" title="{{ $comment }}">
-                                                                <i class="fa fa-question"></i>{!! $mark !!}
-                                                            </td>
-                                                        @elseif($gig->isAttending($user) == 'no')
-                                                            <td class="not-attending" title="{{ $comment }}">
-                                                                <i class="fa fa-times"></i>{!! $mark !!}
-                                                            </td>
-                                                        @else
-                                                            <td class="unanswered" title="{{ $comment }}">
-                                                                <i class="fa fa-minus"></i>{!! $mark !!}
-                                                            </td>
-                                                        @endif
+                                                        <?php switch($gig->isAttending($user)){
+                                                            case "yes":
+                                                                $tdclass = "attending";
+                                                                $iconclass = "fa-check";
+                                                                break;
+                                                            case "no":
+                                                                $tdclass = "not-attending";
+                                                                $iconclass = "fa-times";
+                                                                break;
+                                                            case "maybe":
+                                                                $tdclass = "maybe-attending";
+                                                                $iconclass = "fa-question";
+                                                                break;
+                                                            default:
+                                                                $tdclass = "unanswered";
+                                                                $iconclass = "fa-minus";
+                                                                break;
+                                                        }?>
+                                                        <td class="{{$tdclass}}">
+                                                            <i class="fa {{$iconclass}}"></i>
+                                                            @if($gig->hasCommented($user))
+                                                                <?php $comment = $gig->getComment($user);?>
+                                                                &nbsp;
+                                                                <i class="far fa-comment comment-toggle" title="{{$comment}}"></i>
+                                                                <div class="full-comment" style="display: none"> {{$comment}} </div>
+                                                            @endif
+                                                        </td>
                                                     @endforeach
                                                 </tr>
                                             @endforeach
@@ -130,6 +138,12 @@
                     $(".super-voice-" + voice).data("status", "hidden").find("i").removeClass("fa-caret-down").addClass("fa-caret-right");
                 }
             });
+            $(".comment-toggle").click(function(){
+                $(this).parent().parent().find(".full-comment").toggle();
+            });
+            $(".full-comment").click(function(){
+                $(this).parent().parent().find(".full-comment").toggle();
+            })
         });
     </script>
 @endsection
