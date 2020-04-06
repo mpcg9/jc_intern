@@ -43,7 +43,6 @@
                                                     <?php 
                                                         //TODO: This should probably go into GigAttendanceController somehow...
                                                         $users = $sub_voice->users()->currentAndFuture()->get();
-                                                        $userIDs = $users->keyBy('id')->keys()->all();
                                                     ?>
                                                     <span class="pull-right">
                                                         <div class="btn btn-2d btn-toggle super-voice-{{ $voice->name }}" data-voice="{{ str_replace(' ', '-', $sub_voice->name) }}" data-status="hidden">
@@ -56,8 +55,8 @@
                                                     <?php 
                                                         //TODO: This should probably go into GigAttendanceController somehow...
                                                         $voiceAttendances = $rehearsalattendances[$rehearsal->id];
-                                                        $voiceAttendances = \App\Models\Event::filterAttendancesByUserIDs($voiceAttendances, $userIDs);
-                                                        $voiceAttendances = \App\Models\Event::getAttendanceCountNew($voiceAttendances);
+                                                        $voiceAttendances = \App\Models\Event::filterAttendancesByUsers($voiceAttendances, $users);
+                                                        $voiceAttendances = \App\Models\Event::countNumberOfAttendances($voiceAttendances);
                                                         
                                                     ?>
                                                         <span class ="positive overviewnumber">

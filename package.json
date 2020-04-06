@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "prod": "gulp --production",
-    "dev": "gulp watch"
+    "dev": "gulp watch",
+    "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {},
   "devDependencies": {
@@ -10,5 +11,8 @@
     "bootstrap-sass": "^3.4.1",
     "gulp-cli": "^2.2.0",
     "laravel-elixir": "^6.0.0-18"
-  }
+  },
+  "resolutions": {
+    "graceful-fs": "4.2.3"
+  } 
 }
