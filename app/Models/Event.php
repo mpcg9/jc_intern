@@ -195,10 +195,6 @@ trait Event {
      * @return Attendance[]
      */
     public static function filterAttendancesByUsers($attendances, $users) {
-        if ($users->count() < 1) {
-            return null;
-        }
-
         $attendances = $attendances->whereIn('user.id', $users->keyBy('id')->keys()->all());
         return $attendances;
     }
