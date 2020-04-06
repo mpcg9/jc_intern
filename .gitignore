@@ -20,3 +20,5 @@ package.json
 .project
 /.vscode
 /.settings
+.buildpath
+package.json
