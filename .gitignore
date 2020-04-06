@@ -14,6 +14,7 @@ robots.txt
 .phpstorm.meta.php
 npm-shrinkwrap.json
 package-lock.json
+package.json
 .settings
 .buildpath
 .project
