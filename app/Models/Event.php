@@ -173,6 +173,48 @@ trait Event {
         return $attendances->count();
     }
 
+    /**
+     * Get the number of people who will attend event and who will maybe attend an event
+     * 
+     * @param $attendances - a Collection of Attendances
+     * @return int[] - an array with the number of attendances. Use e.g. int[2] to get number of "yes"-Answers
+     */
+    public static function getAttendanceCountNew($attendances) {
+        $attendanceCounts = array_fill(0,sizeof(\Config::get('enums.attendances')), 0);
+        foreach($attendances as $attendance){
+            $attendanceCounts[$attendance->attendance]++;
+        }
+        return $attendanceCounts;
+    }
+
+    /**
+     * Filter a Collection of Attendances by a Collection of Users
+     * 
+     * @param Attendance[] $attendances
+     * @param User[] $users
+     * @return Attendance[]
+     */
+    public static function filterAttendancesByUsers($attendances, $users) {
+        $attendances = $attendances->whereIn('user.id', $users->keyBy('id')->keys()->all());
+        return $attendances;
+    }
+
+    /**
+     * Filter a Collection of Attendances by an Array of Keys from Users
+     * 
+     * @param Attendance[] $attendances
+     * @param int[]|<key>[] $userIDs
+     * @return Attendance[]
+     */
+    public static function filterAttendancesByUserIDs($attendances, $userIDs){
+        if (sizeof($userIDs) < 1){
+            return null;
+        }
+
+        $attendances = $attendances->whereIn('user.id', $userIDs);
+        return $attendances;
+    }
+
     protected static $current_events = null;
 
     /**

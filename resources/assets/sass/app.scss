@@ -1120,7 +1120,29 @@ a.inline-link {
   padding: 0;
 }
 
-/** attendance list for gigs **/
+/*** attendance list for gigs ***/
+.comment-toggle, .full-comment{
+  cursor: pointer;
+}
+
+/* Make table contents wrap on mobile devices (override bootstrap) */
+#attendance-list{
+  @media screen and (max-width: $screen-xs-max) {
+    > .table{
+      > thead,
+      > tbody,
+      > tfoot {
+        > tr {
+          > th,
+          > td {
+            white-space: normal;
+          }
+        }
+      }
+    }
+  }
+}
+
 #attendance-list {
   tr.voice{
     background-color: $grey;
@@ -1163,6 +1185,22 @@ a.inline-link {
       background-color: $error-color;
     }
   }
+
+  /*
+  tr.subvoice td{
+    .overviewnumber{
+      opacity: 0.8;
+      padding: 0.1em;
+    }
+
+    .positive{
+      background-color: $success-color;
+    }
+
+    .maybe{
+      background-color: $warning-color;
+    }
+  }*/
 }
 
 #calendar_sync_end, #calendar_sync_conclusion, #calendar_sync_intermezzo {

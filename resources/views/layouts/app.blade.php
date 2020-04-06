@@ -125,10 +125,10 @@
 
                             <ul class="dropdown-menu multi-level" role="menu">
                                 <li>
-                                    <a href="{{ route('dates.index', ['view' => 'list']) }}">{{ trans('nav.dates_list') }}</a>
+                                    <a href="{{ route('dates.index', ['view_type' => 'list']) }}">{{ trans('nav.dates_list') }}</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('dates.index', ['view' => 'calendar']) }}">{{ trans('nav.dates_calendar') }}</a>
+                                    <a href="{{ route('dates.index', ['view_type' => 'calendar']) }}">{{ trans('nav.dates_calendar') }}</a>
                                 </li>
                                 <li>
                                     <a href="{{ route('dates.calendarSync') }}">{{ trans('nav.calendar_sync') }}</a>
@@ -140,6 +140,9 @@
                                     </li>
                                     <li>
                                         <a href="{{ route('rehearsals.listAttendances') }}">{{ trans('nav.attendance_last_rehearsal') }}</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('rehearsals.listAttendances', ['id' => 'all']) }}">{{ trans('nav.attendance_rehearsals') }}</a>
                                     </li>
                                 @endif
                                 @if (Auth::user()->isAdmin('gig'))
