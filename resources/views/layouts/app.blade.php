@@ -141,6 +141,9 @@
                                     <li>
                                         <a href="{{ route('rehearsals.listAttendances') }}">{{ trans('nav.attendance_last_rehearsal') }}</a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('rehearsals.listAttendances', ['id' => 'all']) }}">{{ trans('nav.attendance_rehearsals') }}</a>
+                                    </li>
                                 @endif
                                 @if (Auth::user()->isAdmin('gig'))
                                     <li class="list-separator"></li>

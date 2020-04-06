@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\RehearsalAttendance;
 use App\Models\Rehearsal;
 use App\Models\Semester;
+use App\Models\Voice;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -53,12 +54,25 @@ class RehearsalAttendanceController extends AttendanceController {
 
     /**
      * View shows a list to select which users were actually attending the last rehearsal (optionally: The rehearsal
-     * with $rehearsal_id).
+     * with $rehearsal_id or an overview of all rehearsals with $rehearsal_id='all').
      *
-     * @param null $rehearsal_id
+     * @param null|'all'|$rehearsal_id
      * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function listAttendances ($rehearsal_id = null) {
+        if ('all' === $rehearsal_id){
+            // Get all future rehearsals.
+            $rehearsals = Rehearsal::with('rehearsal_attendances.user')->where('end', '>=', Carbon::today())->orderBy('start')->paginate(8, ['title', 'start', 'id']);
+            if (null === $rehearsals || sizeof($rehearsals) < 1) {
+                return back()->withErrors(trans('date.no_rehearsals_in_future'));
+            }
+            $voices = Voice::getParentVoices();
+            return view('date.rehearsal.listAllAttendances', [
+                'rehearsals'  => $rehearsals,
+                'voices' => $voices,
+            ]);
+        }
+
         $rehearsal = Rehearsal::with('rehearsal_attendances.user')->find($rehearsal_id);
 
         if (null === $rehearsal_id || (null === $rehearsal)) {

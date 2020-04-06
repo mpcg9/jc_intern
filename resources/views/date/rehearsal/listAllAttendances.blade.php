@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title'){{ trans('date.gig_listAttendances_title') }}@endsection
+@section('title'){{ trans('date.rehearsal_listAllAttendances_title') }}@endsection
 
 @section('content')
     <div class="row">
         <div class="col-xs-12">
-            <h1>{{ trans('date.gig_listAttendances_title') }}</h1>
+            <h1>{{ trans('date.rehearsal_listAllAttendances_title') }}</h1>
 
             <div class="row">
                 <div class="col-xs-12">
@@ -20,10 +20,10 @@
                                     <tr>
                                         <th style="width: 10em; min-width: 10em;"></th>
 
-                                        @foreach($gigs as $gig)
+                                        @foreach($rehearsals as $rehearsal)
                                             <th style="width: 8em; min-width: 8em;">
-                                                {{ $gig->title }}
-                                                <br>{{ $gig->start }}
+                                                {{ $rehearsal->title }}
+                                                <br>{{ $rehearsal->start }}
                                             </th>
                                         @endforeach
                                     </tr>
@@ -31,8 +31,8 @@
                                 <tbody>
                                     <?php //TODO: This should probably go into GigAttendanceController somehow...
 
-                                        foreach($gigs as $gig){
-                                            $gigattendances[$gig->id] = $gig->gig_attendances()->get();
+                                        foreach($rehearsals as $rehearsal){
+                                            $rehearsalattendances[$rehearsal->id] = $rehearsal->rehearsal_attendances()->get();
                                         }
                                     ?>
                                     @foreach($voices as $voice)
@@ -51,11 +51,11 @@
                                                         </div>
                                                     </span>
                                                 </td>
-                                                @foreach($gigs as $gig)
+                                                @foreach($rehearsals as $rehearsal)
                                                     <td>
                                                     <?php 
                                                         //TODO: This should probably go into GigAttendanceController somehow...
-                                                        $voiceAttendances = $gigattendances[$gig->id];
+                                                        $voiceAttendances = $rehearsalattendances[$rehearsal->id];
                                                         $voiceAttendances = \App\Models\Event::filterAttendancesByUserIDs($voiceAttendances, $userIDs);
                                                         $voiceAttendances = \App\Models\Event::getAttendanceCountNew($voiceAttendances);
                                                         
@@ -64,6 +64,8 @@
                                                             {{ $voiceAttendances[\Config::get('enums.attendances')['yes']] }}
                                                             <i class="fa fa-check"></i>
                                                         </span>&nbsp;
+                                                        <?php // @if(null === $rehearsal->binary_answer) 
+                                                              // binary_answer and $rehearsal->hasBinaryAnswer() are not working :(  ?>
                                                         @if($voiceAttendances[\Config::get('enums.attendances')['maybe']] > 0)
                                                         <span class ="maybe overviewnumber">
                                                             {{ $voiceAttendances[\Config::get('enums.attendances')['maybe']] }}
@@ -77,8 +79,8 @@
                                             @foreach($users as $user)
                                                 <tr class="user voice-{{ $voice->name }} voice-{{ str_replace(' ', '-', $sub_voice->name) }}">
                                                     <td>{{ $user->abbreviated_name }}</td>
-                                                    @foreach($gigs as $gig)
-                                                        <?php switch($gig->isAttending($user)){
+                                                    @foreach($rehearsals as $rehearsal)
+                                                        <?php switch($rehearsal->isAttending($user)){
                                                             case "yes":
                                                                 $tdclass = "attending";
                                                                 $iconclass = "fa-check";
@@ -98,8 +100,8 @@
                                                         }?>
                                                         <td class="{{$tdclass}}">
                                                             <i class="fa {{$iconclass}}"></i>
-                                                            @if($gig->hasCommented($user))
-                                                                <?php $comment = $gig->getComment($user);?>
+                                                            @if($rehearsal->hasCommented($user))
+                                                                <?php $comment = $rehearsal->getComment($user);?>
                                                                 &nbsp;
                                                                 <i class="far fa-comment comment-toggle" title="{{$comment}}"></i>
                                                                 <div class="full-comment" style="display: none"> {{$comment}} </div>
@@ -113,8 +115,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        @if(!is_array($gigs))
-                            {{ $gigs->links() }}
+                        @if(!is_array($rehearsals))
+                            {{ $rehearsals->links() }}
                         @endif
                     </div>
                 </div>
