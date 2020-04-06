@@ -3616,7 +3616,6 @@ select[multiple].input-lg,
   line-height: 1.428571429;
   border-radius: 4px;
   -webkit-user-select: none;
-  -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
@@ -7765,7 +7764,6 @@ i.fa {
   -webkit-user-select: none;
   /* Chrome/Safari/Opera */
   /* Konqueror */
-  -moz-user-select: none;
   /* Firefox */
   -ms-user-select: none;
   /* IE/Edge */
@@ -8291,7 +8289,6 @@ i.fa {
   -webkit-user-select: none;
   /* Chrome/Safari/Opera */
   /* Konqueror */
-  -moz-user-select: none;
   /* Firefox */
   -ms-user-select: none;
   /* IE/Edge */
@@ -8335,7 +8332,6 @@ i.fa {
   -webkit-user-select: none;
   /* Chrome/Safari/Opera */
   /* Konqueror */
-  -moz-user-select: none;
   /* Firefox */
   -ms-user-select: none;
   /* IE/Edge */
@@ -8889,6 +8885,11 @@ div.radio input:hover + span:before {
 
 a.inline-link {
   padding: 0;
+}
+
+/*** attendance list for gigs ***/
+.comment-toggle {
+  cursor: pointer;
 }
 
 /* Make table contents wrap on mobile devices (override bootstrap) */
