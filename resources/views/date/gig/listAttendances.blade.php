@@ -46,7 +46,7 @@
                                                         $userIDs = $users->keyBy('id')->keys()->all();
                                                     ?>
                                                     <span class="pull-right">
-                                                        <div class="btn btn-2d btn-toggle super-voice-{{ $voice->name }}" data-voice="{{ str_replace(' ', '-', $sub_voice->name) }}" data-status="hidden">
+                                                        <div class="btn btn-2d btn-toggle voice-toggle super-voice-{{ $voice->name }}" data-voice="{{ str_replace(' ', '-', $sub_voice->name) }}" data-status="hidden">
                                                             <i class="fa fa-caret-right"></i>
                                                         </div>
                                                     </span>
@@ -101,7 +101,9 @@
                                                             @if($gig->hasCommented($user))
                                                                 <?php $comment = $gig->getComment($user);?>
                                                                 &nbsp;
-                                                                <i class="far fa-comment comment-toggle" title="{{$comment}}"></i>
+                                                                <a class="btn btn-2d btn-toggle comment-toggle">
+                                                                    <i class="far fa-comment" title="{{$comment}}"></i>
+                                                                </a>
                                                                 <div class="full-comment" style="display: none"> {{$comment}} </div>
                                                             @endif
                                                         </td>
@@ -126,7 +128,7 @@
 @section('js')
     <script type="text/javascript">
         $(document).ready(function () {
-            $(".btn-toggle").click(function () {
+            $(".btn-toggle.voice-toggle").click(function () {
                 var voice = $(this).data('voice');
 
                 //TODO: Make this more beautiful.
@@ -140,12 +142,9 @@
                     $(".super-voice-" + voice).data("status", "hidden").find("i").removeClass("fa-caret-down").addClass("fa-caret-right");
                 }
             });
-            $(".comment-toggle").click(function(){
-                $(this).parent().parent().find(".full-comment").toggle();
+            $(".btn-toggle.comment-toggle").click(function(){
+                $(this).parent().find(".full-comment").toggle();
             });
-            $(".full-comment").click(function(){
-                $(this).parent().parent().find(".full-comment").toggle();
-            })
         });
     </script>
 @endsection

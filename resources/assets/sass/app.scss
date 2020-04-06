@@ -1120,11 +1120,6 @@ a.inline-link {
   padding: 0;
 }
 
-/*** attendance list for gigs ***/
-.comment-toggle, .full-comment{
-  cursor: pointer;
-}
-
 /* Make table contents wrap on mobile devices (override bootstrap) */
 #attendance-list{
   @media screen and (max-width: $screen-xs-max) {
@@ -1152,21 +1147,24 @@ a.inline-link {
     background-color: $grey-lighter;
   }
 
-  tr.voice, tr.subvoice {
-    .btn-toggle {
-      color: $font-color;
-      background-color: $font-color-inverse;
-      @include shadow-2d($grey-lighter);
-      padding: 0 8px;
+  .btn-toggle {
+    color: $font-color;
+    background-color: $font-color-inverse;
+    @include shadow-2d($grey-lighter);
+    padding: 0 8px;
 
-      &:hover {
-        color: $font-color !important;
-      }
+    &:hover {
+      color: $font-color !important;
+    }
 
-      i {
-        width: 6px;
-        min-width: 6px;
-      }
+    i.fa-caret-right, i.fa-caret-down {
+      width: 6px;
+      min-width: 6px;
+    }
+
+    i.fa-comment {
+      width: 14px;
+      min-width: 14px;
     }
   }
 

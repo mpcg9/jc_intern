@@ -3616,6 +3616,7 @@ select[multiple].input-lg,
   line-height: 1.428571429;
   border-radius: 4px;
   -webkit-user-select: none;
+  -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
 }
@@ -7764,6 +7765,7 @@ i.fa {
   -webkit-user-select: none;
   /* Chrome/Safari/Opera */
   /* Konqueror */
+  -moz-user-select: none;
   /* Firefox */
   -ms-user-select: none;
   /* IE/Edge */
@@ -8289,6 +8291,7 @@ i.fa {
   -webkit-user-select: none;
   /* Chrome/Safari/Opera */
   /* Konqueror */
+  -moz-user-select: none;
   /* Firefox */
   -ms-user-select: none;
   /* IE/Edge */
@@ -8332,6 +8335,7 @@ i.fa {
   -webkit-user-select: none;
   /* Chrome/Safari/Opera */
   /* Konqueror */
+  -moz-user-select: none;
   /* Firefox */
   -ms-user-select: none;
   /* IE/Edge */
@@ -8887,11 +8891,6 @@ a.inline-link {
   padding: 0;
 }
 
-/*** attendance list for gigs ***/
-.comment-toggle, .full-comment {
-  cursor: pointer;
-}
-
 /* Make table contents wrap on mobile devices (override bootstrap) */
 @media screen and (max-width: 767px) {
   #attendance-list > .table > thead > tr > th,
@@ -8930,7 +8929,7 @@ a.inline-link {
   background-color: #eaeaea;
 }
 
-#attendance-list tr.voice .btn-toggle, #attendance-list tr.subvoice .btn-toggle {
+#attendance-list .btn-toggle {
   color: #020202;
   background-color: #fdfdfd;
   border-radius: 0 ;
@@ -8939,13 +8938,18 @@ a.inline-link {
   padding: 0 8px;
 }
 
-#attendance-list tr.voice .btn-toggle:hover, #attendance-list tr.subvoice .btn-toggle:hover {
+#attendance-list .btn-toggle:hover {
   color: #020202 !important;
 }
 
-#attendance-list tr.voice .btn-toggle i, #attendance-list tr.subvoice .btn-toggle i {
+#attendance-list .btn-toggle i.fa-caret-right, #attendance-list .btn-toggle i.fa-caret-down {
   width: 6px;
   min-width: 6px;
+}
+
+#attendance-list .btn-toggle i.fa-comment {
+  width: 14px;
+  min-width: 14px;
 }
 
 #attendance-list tr.user {
