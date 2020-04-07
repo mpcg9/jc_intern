@@ -102,7 +102,9 @@
                                                             @if($rehearsal->hasCommented($user))
                                                                 <?php $comment = $rehearsal->getComment($user);?>
                                                                 &nbsp;
-                                                                <i class="far fa-comment comment-toggle" title="{{$comment}}"></i>
+                                                                <a class="btn btn-2d btn-toggle comment-toggle">
+                                                                    <i class="far fa-comment" title="{{$comment}}"></i>
+                                                                </a>
                                                                 <div class="full-comment" style="display: none"> {{$comment}} </div>
                                                             @endif
                                                         </td>
