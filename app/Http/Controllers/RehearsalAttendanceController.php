@@ -59,6 +59,7 @@ class RehearsalAttendanceController extends AttendanceController {
      * @param null|'all'|$rehearsal_id
      * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
+    //TODO: merge this function with the same function in GigAttendanceController to a unified function in AttendanceController
     public function listAttendances ($rehearsal_id = null) {
         if ('all' === $rehearsal_id){
             // Get all future rehearsals.

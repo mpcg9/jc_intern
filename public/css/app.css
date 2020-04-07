@@ -8894,8 +8894,8 @@ a.inline-link {
 
 
 /*** attendance list for gigs ***/
-.comment-toggle, .full-comment {
-  cursor: pointer;
+.full-comment {
+  cursor: default;
 }
 
 /* Make table contents wrap on mobile devices (override bootstrap) */
@@ -8936,7 +8936,7 @@ a.inline-link {
   background-color: #eaeaea;
 }
 
-#attendance-list tr.voice .btn-toggle, #attendance-list tr.subvoice .btn-toggle {
+#attendance-list .btn-toggle {
   color: #020202;
   background-color: #fdfdfd;
   border-radius: 0 ;
@@ -8945,13 +8945,18 @@ a.inline-link {
   padding: 0 8px;
 }
 
-#attendance-list tr.voice .btn-toggle:hover, #attendance-list tr.subvoice .btn-toggle:hover {
+#attendance-list .btn-toggle:hover {
   color: #020202 !important;
 }
 
-#attendance-list tr.voice .btn-toggle i, #attendance-list tr.subvoice .btn-toggle i {
+#attendance-list .btn-toggle i.fa-caret-right, #attendance-list .btn-toggle i.fa-caret-down {
   width: 6px;
   min-width: 6px;
+}
+
+#attendance-list .btn-toggle i.fa-comment {
+  width: 14px;
+  min-width: 14px;
 }
 
 #attendance-list tr.user {

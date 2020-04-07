@@ -43,10 +43,9 @@
                                                     <?php 
                                                         //TODO: This should probably go into GigAttendanceController somehow...
                                                         $users = $sub_voice->users()->currentAndFuture()->get();
-                                                        $userIDs = $users->keyBy('id')->keys()->all();
                                                     ?>
                                                     <span class="pull-right">
-                                                        <div class="btn btn-2d btn-toggle super-voice-{{ $voice->name }}" data-voice="{{ str_replace(' ', '-', $sub_voice->name) }}" data-status="hidden">
+                                                        <div class="btn btn-2d btn-toggle voice-toggle super-voice-{{ $voice->name }}" data-voice="{{ str_replace(' ', '-', $sub_voice->name) }}" data-status="hidden">
                                                             <i class="fa fa-caret-right"></i>
                                                         </div>
                                                     </span>
@@ -56,8 +55,8 @@
                                                     <?php 
                                                         //TODO: This should probably go into GigAttendanceController somehow...
                                                         $voiceAttendances = $gigattendances[$gig->id];
-                                                        $voiceAttendances = \App\Models\Event::filterAttendancesByUserIDs($voiceAttendances, $userIDs);
-                                                        $voiceAttendances = \App\Models\Event::getAttendanceCountNew($voiceAttendances);
+                                                        $voiceAttendances = \App\Models\Event::filterAttendancesByUsers($voiceAttendances, $users);
+                                                        $voiceAttendances = \App\Models\Event::countNumberOfAttendances($voiceAttendances);
                                                         
                                                     ?>
                                                         <span class ="positive overviewnumber">
@@ -101,7 +100,9 @@
                                                             @if($gig->hasCommented($user))
                                                                 <?php $comment = $gig->getComment($user);?>
                                                                 &nbsp;
-                                                                <i class="far fa-comment comment-toggle" title="{{$comment}}"></i>
+                                                                <a class="btn btn-2d btn-toggle comment-toggle">
+                                                                    <i class="far fa-comment" title="{{$comment}}"></i>
+                                                                </a>
                                                                 <div class="full-comment" style="display: none"> {{$comment}} </div>
                                                             @endif
                                                         </td>
@@ -126,26 +127,23 @@
 @section('js')
     <script type="text/javascript">
         $(document).ready(function () {
-            $(".btn-toggle").click(function () {
-                var voice = $(this).data('voice');
+            // open and close subvoices
+            $(".subvoice").click(function (){
+                var togglebutton = $(this).find(".btn-toggle");
+                var voice = togglebutton.data('voice');
 
-                //TODO: Make this more beautiful.
-                if ($(this).data("status") === "hidden") {
-                    $(".voice-" + voice).show();
-                    $(this).data("status", "display").find("i").removeClass("fa-caret-right").addClass("fa-caret-down");
-                    $(".super-voice-" + voice).data("status", "display").find("i").removeClass("fa-caret-right").addClass("fa-caret-down");
-                } else {
-                    $(".voice-" + voice).hide();
-                    $(this).data("status", "hidden").find("i").removeClass("fa-caret-down").addClass("fa-caret-right");
-                    $(".super-voice-" + voice).data("status", "hidden").find("i").removeClass("fa-caret-down").addClass("fa-caret-right");
+                $(this).nextAll(".voice-"+voice).toggle();
+                if("hidden" === togglebutton.data("status")){
+                    togglebutton.data("status","display").children("i").removeClass("fa-caret-right").addClass("fa-caret-down");
+                }
+                else{
+                    togglebutton.data("status", "hidden").children("i").removeClass("fa-caret-down").addClass("fa-caret-right");
                 }
             });
-            $(".comment-toggle").click(function(){
-                $(this).parent().parent().find(".full-comment").toggle();
+            // open and close comments for one user
+            $("td").has(".comment-toggle").click(function(){
+                $(this).siblings().addBack().find(".full-comment").toggle();
             });
-            $(".full-comment").click(function(){
-                $(this).parent().parent().find(".full-comment").toggle();
-            })
         });
     </script>
 @endsection

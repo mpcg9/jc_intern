@@ -157,6 +157,7 @@ trait Event {
      * @param User[]|null $users
      * @return int
      */
+    //TODO: remove function
     public function getAttendanceCount($users = null) {
         $attendances = $this->getAttendances()->filter(function ($value) {
             return $value->attendance === \Config::get('enums.attendances')['yes'];
@@ -179,7 +180,7 @@ trait Event {
      * @param $attendances - a Collection of Attendances
      * @return int[] - an array with the number of attendances. Use e.g. int[2] to get number of "yes"-Answers
      */
-    public static function getAttendanceCountNew($attendances) {
+    public static function countNumberOfAttendances($attendances) {
         $attendanceCounts = array_fill(0,sizeof(\Config::get('enums.attendances')), 0);
         foreach($attendances as $attendance){
             $attendanceCounts[$attendance->attendance]++;
@@ -196,22 +197,6 @@ trait Event {
      */
     public static function filterAttendancesByUsers($attendances, $users) {
         $attendances = $attendances->whereIn('user.id', $users->keyBy('id')->keys()->all());
-        return $attendances;
-    }
-
-    /**
-     * Filter a Collection of Attendances by an Array of Keys from Users
-     * 
-     * @param Attendance[] $attendances
-     * @param int[]|<key>[] $userIDs
-     * @return Attendance[]
-     */
-    public static function filterAttendancesByUserIDs($attendances, $userIDs){
-        if (sizeof($userIDs) < 1){
-            return null;
-        }
-
-        $attendances = $attendances->whereIn('user.id', $userIDs);
         return $attendances;
     }
 

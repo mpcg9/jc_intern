@@ -22,6 +22,7 @@ class GigAttendanceController extends AttendanceController {
     }
 
     //TODO: Make filter gigs possible (via $request?) -> with_old, only XYZ etc.
+    //TODO: merge this function with the same function in GigAttendanceController to a unified function in AttendanceController
     public function listAttendances(Request $request, $gig_id = 0) {
         if ($gig_id < 1) {
             // Get all future gigs of this semester.
