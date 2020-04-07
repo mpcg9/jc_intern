@@ -68,9 +68,28 @@ class RehearsalAttendanceController extends AttendanceController {
                 return back()->withErrors(trans('date.no_rehearsals_in_future'));
             }
             $voices = Voice::getParentVoices();
-            return view('date.rehearsal.listAllAttendances', [
-                'rehearsals'  => $rehearsals,
+
+            foreach($rehearsals as $rehearsal){
+                $rehearsalattendances[$rehearsal->id] = $rehearsal->rehearsal_attendances()->get();
+            }
+    
+            foreach($voices as $voice){
+                foreach($voice->children as $sub_voice){
+                    $voiceusers = $sub_voice->users()->currentAndFuture()->get();
+                    foreach($rehearsals as $rehearsal){
+                        $voiceattendances = \App\Models\Event::filterAttendancesByUsers($rehearsalattendances[$rehearsal->id], $voiceusers);
+                        $attendanceCounts[$rehearsal->id][$sub_voice->id] = \App\Models\Event::countNumberOfAttendances($voiceattendances);
+                    }
+                    $users[$sub_voice->id] = $voiceusers;
+                }
+            }
+    
+            return view('date.event.listAllAttendances', [
+                'title' => trans('date.rehearsal_listAllAttendances_title'),
+                'attendanceCounts' => $attendanceCounts,
+                'events'  => $rehearsals,
                 'voices' => $voices,
+                'users' => $users
             ]);
         }
 

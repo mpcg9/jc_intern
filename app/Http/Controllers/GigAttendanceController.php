@@ -36,10 +36,28 @@ class GigAttendanceController extends AttendanceController {
         }
 
         $voices = Voice::getParentVoices();
+        
+        foreach($gigs as $gig){
+            $gigattendances[$gig->id] = $gig->gig_attendances()->get();
+        }
 
-        return view('date.gig.listAttendances', [
-            'gigs'  => $gigs,
+        foreach($voices as $voice){
+            foreach($voice->children as $sub_voice){
+                $voiceusers = $sub_voice->users()->currentAndFuture()->get();
+                foreach($gigs as $gig){
+                    $voiceattendances = \App\Models\Event::filterAttendancesByUsers($gigattendances[$gig->id], $voiceusers);
+                    $attendanceCounts[$gig->id][$sub_voice->id] = \App\Models\Event::countNumberOfAttendances($voiceattendances);
+                }
+                $users[$sub_voice->id] = $voiceusers;
+            }
+        }
+
+        return view('date.event.listAllAttendances', [
+            'title' => trans('date.gig_listAttendances_title'),
+            'attendanceCounts' => $attendanceCounts,
+            'events'  => $gigs,
             'voices' => $voices,
+            'users' => $users
         ]);
     }
 

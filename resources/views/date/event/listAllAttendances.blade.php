@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title'){{ trans('date.gig_listAttendances_title') }}@endsection
+@section('title'){{ $title }}@endsection
 
 @section('content')
     <div class="row">
         <div class="col-xs-12">
-            <h1>{{ trans('date.gig_listAttendances_title') }}</h1>
+            <h1>{{ $title }}</h1>
 
             <div class="row">
                 <div class="col-xs-12">
@@ -20,52 +20,37 @@
                                     <tr>
                                         <th style="width: 10em; min-width: 10em;"></th>
 
-                                        @foreach($gigs as $gig)
+                                        @foreach($events as $event)
                                             <th style="width: 8em; min-width: 8em;">
-                                                {{ $gig->title }}
-                                                <br>{{ $gig->start }}
+                                                {{ $event->title }}
+                                                <br>{{ $event->start }}
                                             </th>
                                         @endforeach
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php //TODO: This should probably go into GigAttendanceController somehow...
-
-                                        foreach($gigs as $gig){
-                                            $gigattendances[$gig->id] = $gig->gig_attendances()->get();
-                                        }
-                                    ?>
                                     @foreach($voices as $voice)
                                         @foreach($voice->children as $sub_voice)
                                             <tr class="subvoice">
                                                 <td>
                                                     {{$sub_voice->name}}
-                                                    <?php 
-                                                        //TODO: This should probably go into GigAttendanceController somehow...
-                                                        $users = $sub_voice->users()->currentAndFuture()->get();
-                                                    ?>
                                                     <span class="pull-right">
-                                                        <div class="btn btn-2d btn-toggle voice-toggle super-voice-{{ $voice->name }}" data-voice="{{ str_replace(' ', '-', $sub_voice->name) }}" data-status="hidden">
+                                                        <div class="btn btn-2d btn-toggle super-voice-{{ $voice->name }}" data-voice="{{ str_replace(' ', '-', $sub_voice->name) }}" data-status="hidden">
                                                             <i class="fa fa-caret-right"></i>
                                                         </div>
                                                     </span>
                                                 </td>
-                                                @foreach($gigs as $gig)
+                                                @foreach($events as $event)
                                                     <td>
-                                                    <?php 
-                                                        //TODO: This should probably go into GigAttendanceController somehow...
-                                                        $voiceAttendances = $gigattendances[$gig->id];
-                                                        $voiceAttendances = \App\Models\Event::filterAttendancesByUsers($voiceAttendances, $users);
-                                                        $voiceAttendances = \App\Models\Event::countNumberOfAttendances($voiceAttendances);
-                                                        
-                                                    ?>
                                                         <span class ="positive overviewnumber">
-                                                            {{ $voiceAttendances[\Config::get('enums.attendances')['yes']] }}
+                                                            {{ $attendanceCounts[$event->id][$sub_voice->id][\Config::get('enums.attendances')['yes']] }}
                                                             <i class="fa fa-check"></i>
                                                         </span>&nbsp;
-                                                        @if($voiceAttendances[\Config::get('enums.attendances')['maybe']] > 0)
+                                                        <?php // @if(null === $event->binary_answer) 
+                                                              // binary_answer and $event->hasBinaryAnswer() are not working :(  ?>
+                                                        @if( $attendanceCounts[$event->id][$sub_voice->id][\Config::get('enums.attendances')['maybe']] > 0)
                                                         <span class ="maybe overviewnumber">
-                                                            {{ $voiceAttendances[\Config::get('enums.attendances')['maybe']] }}
+                                                            {{ $attendanceCounts[$event->id][$sub_voice->id][\Config::get('enums.attendances')['maybe']] }}
                                                             <i class="fa fa-question"></i>&nbsp;
                                                         </span>
                                                         @endif
@@ -73,11 +58,11 @@
                                                 @endforeach
                                                 
                                             </tr>
-                                            @foreach($users as $user)
+                                            @foreach($users[$sub_voice->id] as $user)
                                                 <tr class="user voice-{{ $voice->name }} voice-{{ str_replace(' ', '-', $sub_voice->name) }}">
                                                     <td>{{ $user->abbreviated_name }}</td>
-                                                    @foreach($gigs as $gig)
-                                                        <?php switch($gig->isAttending($user)){
+                                                    @foreach($events as $event)
+                                                        <?php switch($event->isAttending($user)){
                                                             case "yes":
                                                                 $tdclass = "attending";
                                                                 $iconclass = "fa-check";
@@ -97,8 +82,8 @@
                                                         }?>
                                                         <td class="{{$tdclass}}">
                                                             <i class="fa {{$iconclass}}"></i>
-                                                            @if($gig->hasCommented($user))
-                                                                <?php $comment = $gig->getComment($user);?>
+                                                            @if($event->hasCommented($user))
+                                                                <?php $comment = $event->getComment($user);?>
                                                                 &nbsp;
                                                                 <a class="btn btn-2d btn-toggle comment-toggle">
                                                                     <i class="far fa-comment" title="{{$comment}}"></i>
@@ -114,8 +99,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        @if(!is_array($gigs))
-                            {{ $gigs->links() }}
+                        @if(!is_array($events))
+                            {{ $events->links() }}
                         @endif
                     </div>
                 </div>
