@@ -139,7 +139,7 @@
                                         <a href="{{ route('rehearsals.create') }}">{{ trans('nav.rehearsal_create') }}</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('rehearsals.listAttendances') }}">{{ trans('nav.attendance_last_rehearsal') }}</a>
+                                        <a href="{{ route('rehearsals.checkAttendances') }}">{{ trans('nav.attendance_last_rehearsal') }}</a>
                                     </li>
                                     <li>
                                         <a href="{{ route('rehearsals.listAttendances', ['id' => 'all']) }}">{{ trans('nav.attendance_rehearsals') }}</a>

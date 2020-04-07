@@ -1,7 +1,7 @@
 <div class="row list-item" data-filters='["{{ implode('", "', $date->getApplicableFilters()) }}"]'>
     <div class="col-xs-12 context-box-2d event event-{{ implode(" event-", $date->getApplicableFilters()) }}">
         <div class="row">
-            <div class="col-xs-12 col-sm-9 col-lg-10">
+            <div class="col-xs-12 col-sm-8 col-lg-9">
                 <h4 class="title">
                     {{ $date->getTitle() }}
                     <span class="not-going-note" style="{{ in_array('not-going', $date->getApplicableFilters())  ? 'display: inline;' : 'display: none;' }};">
@@ -48,7 +48,7 @@
                     <p class="date_weight"><strong>{{ trans('date.weight', ['weight' => localize_number($date->weight)]) }}</strong></p>
                 @endif
             </div>
-            <div class="col-xs-12 col-sm-3 col-lg-2 event-controls">
+            <div class="col-xs-12 col-sm-4 col-lg-3 event-controls">
                 @if($date->needsAnswer())
                     @if($date->hasBinaryAnswer() && $date->hasAnswered())
                         <div class="row">
@@ -118,6 +118,13 @@
                                                class="btn btn-2d"
                                                title="{{ trans('date.view_attendances') }}">
                                             <i class="fas fa-eye"></i>
+                                        </a>
+                                        @endif
+                                        @if('rehearsals' === $date->getShortNamePlural() && $date->isMandatory())
+                                            <a href="{{ route($date->getShortNamePlural() . '.checkAttendances', ['id' => $date->id]) }}"
+                                                class="btn btn-2d"
+                                                title="{{ trans('date.check_attendances') }}">
+                                            <i class="fas fa-check"></i>
                                         </a>
                                         @endif
                                         @if(isset($date->getEventOptions()['url']))

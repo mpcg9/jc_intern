@@ -24,7 +24,7 @@ class GigAttendanceController extends AttendanceController {
     //TODO: Make filter gigs possible (via $request?) -> with_old, only XYZ etc.
     //TODO: merge this function with the same function in GigAttendanceController to a unified function in AttendanceController
     public function listAttendances(Request $request, $gig_id = 0) {
-        if ($gig_id < 1) {
+        if ($gig_id = 'all' || $gig_id < 1) {
             // Get all future gigs of this semester.
             $gigs = Gig::with('gig_attendances.user')->where('end', '>=', Carbon::today())->orderBy('start')->paginate(8, ['title', 'start', 'id']);
         } else {
@@ -36,10 +36,28 @@ class GigAttendanceController extends AttendanceController {
         }
 
         $voices = Voice::getParentVoices();
+        
+        foreach($gigs as $gig){
+            $gigattendances[$gig->id] = $gig->gig_attendances()->get();
+        }
 
-        return view('date.gig.listAttendances', [
-            'gigs'  => $gigs,
+        foreach($voices as $voice){
+            foreach($voice->children as $sub_voice){
+                $voiceusers = $sub_voice->users()->currentAndFuture()->get();
+                foreach($gigs as $gig){
+                    $voiceattendances = \App\Models\Event::filterAttendancesByUsers($gigattendances[$gig->id], $voiceusers);
+                    $attendanceCounts[$gig->id][$sub_voice->id] = \App\Models\Event::countNumberOfAttendances($voiceattendances);
+                }
+                $users[$sub_voice->id] = $voiceusers;
+            }
+        }
+
+        return view('date.event.listAttendances', [
+            'title' => trans('date.gig_listAttendances_title'),
+            'attendanceCounts' => $attendanceCounts,
+            'events'  => $gigs,
             'voices' => $voices,
+            'users' => $users
         ]);
     }
 

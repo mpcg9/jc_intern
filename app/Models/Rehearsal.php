@@ -110,6 +110,10 @@ class Rehearsal extends \Eloquent implements IdentifiableEvent {
         return true;
     }
 
+    public function isMandatory(){
+        return true === $this->mandatory; //additional comparison to avoid having other classes changing this protected property, not sure if required!
+    }
+
     /**
      * Tells you if there is a non-standard weight attached to this rehearsal
      *
