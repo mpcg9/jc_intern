@@ -60,39 +60,45 @@ class RehearsalAttendanceController extends AttendanceController {
      * @return $this|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     //TODO: merge this function with the same function in GigAttendanceController to a unified function in AttendanceController
-    public function listAttendances ($rehearsal_id = null) {
-        if ('all' === $rehearsal_id){
+    public function listAttendances ($rehearsal_id = 0) {
+        if ('all' === $rehearsal_id || $rehearsal_id < 1){
             // Get all future rehearsals.
             $rehearsals = Rehearsal::with('rehearsal_attendances.user')->where('end', '>=', Carbon::today())->orderBy('start')->paginate(8, ['title', 'start', 'id']);
-            if (null === $rehearsals || sizeof($rehearsals) < 1) {
-                return back()->withErrors(trans('date.no_rehearsals_in_future'));
-            }
-            $voices = Voice::getParentVoices();
-
-            foreach($rehearsals as $rehearsal){
-                $rehearsalattendances[$rehearsal->id] = $rehearsal->rehearsal_attendances()->get();
-            }
-    
-            foreach($voices as $voice){
-                foreach($voice->children as $sub_voice){
-                    $voiceusers = $sub_voice->users()->currentAndFuture()->get();
-                    foreach($rehearsals as $rehearsal){
-                        $voiceattendances = \App\Models\Event::filterAttendancesByUsers($rehearsalattendances[$rehearsal->id], $voiceusers);
-                        $attendanceCounts[$rehearsal->id][$sub_voice->id] = \App\Models\Event::countNumberOfAttendances($voiceattendances);
-                    }
-                    $users[$sub_voice->id] = $voiceusers;
-                }
-            }
-    
-            return view('date.event.listAllAttendances', [
-                'title' => trans('date.rehearsal_listAllAttendances_title'),
-                'attendanceCounts' => $attendanceCounts,
-                'events'  => $rehearsals,
-                'voices' => $voices,
-                'users' => $users
-            ]);
+        }
+        else{
+            $rehearsals = [Rehearsal::with('rehearsal_attendances.user')->find($rehearsal_id)];
+        }
+        if (null === $rehearsals || sizeof($rehearsals) < 1) {
+            return back()->withErrors(trans('date.no_rehearsals_in_future'));
         }
 
+        $voices = Voice::getParentVoices();
+
+        foreach($rehearsals as $rehearsal){
+            $rehearsalattendances[$rehearsal->id] = $rehearsal->rehearsal_attendances()->get();
+        }
+
+        foreach($voices as $voice){
+            foreach($voice->children as $sub_voice){
+                $voiceusers = $sub_voice->users()->currentAndFuture()->get();
+                foreach($rehearsals as $rehearsal){
+                    $voiceattendances = \App\Models\Event::filterAttendancesByUsers($rehearsalattendances[$rehearsal->id], $voiceusers);
+                    $attendanceCounts[$rehearsal->id][$sub_voice->id] = \App\Models\Event::countNumberOfAttendances($voiceattendances);
+                }
+                $users[$sub_voice->id] = $voiceusers;
+            }
+        }
+
+        return view('date.event.listAttendances', [
+            'title' => trans('date.rehearsal_listAllAttendances_title'),
+            'attendanceCounts' => $attendanceCounts,
+            'events'  => $rehearsals,
+            'voices' => $voices,
+            'users' => $users
+        ]);  
+    }
+
+    public function checkAttendances ($rehearsal_id = null) {
         $rehearsal = Rehearsal::with('rehearsal_attendances.user')->find($rehearsal_id);
 
         if (null === $rehearsal_id || (null === $rehearsal)) {
@@ -112,7 +118,7 @@ class RehearsalAttendanceController extends AttendanceController {
             return $query->where('rehearsal_id', $rehearsal->id)->get();
         }])->get();
 
-        return view('date.rehearsal.listAttendances', [
+        return view('date.rehearsal.checkAttendances', [
             'currentRehearsal' => $rehearsal,
             'users'     => $users,
             //'rehearsals'=> $rehearsals
